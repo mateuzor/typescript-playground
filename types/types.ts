@@ -143,6 +143,7 @@ console.log(employee.clockOut(9));
 //Alias - creating a custom type an using on our Employee type
 
 type Employee = {
+  // I cannot be extended, different from the *interface* type
   supervisors: string[];
   clockOut: (hours: number) => string;
 };
@@ -219,3 +220,17 @@ let correntista: AccountHolder = {
 
 correntista.bankAccount.deposit(3000);
 console.log(correntista);
+
+// as type assertion
+// basically what this does is, trust me I know what I am doing
+const value: any = "Hello my friend";
+const size = (value as string).length;
+
+// as any
+// disables type checking
+const x = "Mateus" as any;
+x.somethingInexistente(); // no error in compilation time
+
+// as const
+// it makes a vlue immutable and literal
+const requestStatus = "success" as const;
