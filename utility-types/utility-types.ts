@@ -33,7 +33,7 @@ const myLogin: userLogin = {
 
 console.log(myLogin);
 
-// Record, is a type where we can we other types to create a new type key: value
+// Record, is a type where we can create other types to create a new type key: value
 type Role = "admin" | "user" | "guest";
 
 const permissions: Record<Role, string[]> = {
