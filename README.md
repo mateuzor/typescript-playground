@@ -1,23 +1,70 @@
-tsc -v -> Typescript Version
-tsc --init -> Cria nosso arquivo de configuração typescript tsconfig.json
+# TypeScript Playground
 
-### Compilando o Typescript manualmente
+## 📦 Installation & Setup
 
-tsc file_name.js
+- **Installing**
 
-testando arquivo com o node
-node file_name.ts // ele já consegue interpretar o arquivo typecript direto, diferente to browser
+```bash
+npm install -g typescript
+```
 
-### Compilando automaticamente no terminal
+- **Create a `tsconfig.json` config file**
 
-install the vscode extension code runner
-install ts-node (global) -> npm i -g ts-node
+```bash
+tsc --init
+```
 
-### Iniciando projeto com live server
+---
 
+## ⚡ Compilation
+
+### Manual compilation
+
+```bash
+tsc file_name.ts
+```
+
+### Running a file with Node
+
+> Node can interpret TypeScript files directly (unlike the browser).
+
+```bash
+node file_name.ts
+```
+
+---
+
+## 🔄 Automatic Compilation
+
+- **Watch mode (auto transpile to JS)**
+
+```bash
+tsc -w
+```
+
+- **Run TypeScript without manual transpilation**
+
+1. Install **Code Runner** extension in VSCode
+2. Install **ts-node** globally:
+
+   ```bash
+   npm install -g ts-node
+   ```
+
+---
+
+## 🚀 Starting a Project with Live Server
+
+```bash
 npm start
+```
 
-### Transpilando para JS automaticamente
+---
 
-tsc -w -> Ele ficando escutando a nossa pasta
-e vai fazer o processo automaticamente
+## 🔗 Interoperability
+
+**TypeScript and JavaScript** can work together in the same project:
+
+- You can use **JavaScript files inside TypeScript projects**.
+- TypeScript code is transpiled to **standard JavaScript**, usable anywhere.
+- This makes it easier to **gradually migrate** existing JS projects to TS.
