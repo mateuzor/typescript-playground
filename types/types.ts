@@ -234,3 +234,40 @@ x.somethingInexistente(); // no error in compilation time
 // as const
 // it makes a vlue immutable and literal
 const requestStatus = "success" as const;
+
+// non null assertion
+let myName: string | null = null;
+
+// we use the non-null assertion operator to tell the compiler that name will never be null
+let nameLength = myName!.length;
+
+const input = document.querySelector("input");
+
+// Non-null Assertion
+// Without the "!", TypeScript warns that `input` might be null
+input!.focus(); // The "!" operator asserts that input is definitely not null
+
+// satisgies keyword
+type SomeUser = {
+  id: number;
+  name: string;
+};
+
+// Without `satisfies`, using `as User` would widen types and lose literal values
+const Someuser = {
+  id: 1,
+  name: "Alice",
+} satisfies SomeUser; // Ensures the object matches the User type, while preserving exact value types
+
+// Type intersection
+interface A {
+  a: string;
+}
+
+interface B {
+  b: number;
+}
+
+type AB = A & B; // we use the operator &
+let combinedValue: AB = { a: "hello", b: 42 };
+console.log(combinedValue);
