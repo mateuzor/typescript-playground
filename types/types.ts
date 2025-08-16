@@ -143,7 +143,6 @@ console.log(employee.clockOut(9));
 //Alias - creating a custom type an using on our Employee type
 
 type Employee = {
-  // I cannot be extended, different from the *interface* type
   supervisors: string[];
   clockOut: (hours: number) => string;
 };
@@ -172,18 +171,18 @@ function fail(msg: string): never {
   throw new Error(msg);
 }
 
-const product = {
-  productName: "Soap",
-  price: -1,
-  validateProduct() {
-    if (!this.productName || this.productName.trim().length == 0) {
-      fail("Its needs a name");
-    }
-    if (this.price <= 0) {
-      fail("Invalid price");
-    }
-  },
-};
+// const product = {
+//   productName: "Soap",
+//   price: -1,
+//   validateProduct() {
+//     if (!this.productName || this.productName.trim().length === 0) {
+//       fail("Its needs a name");
+//     }
+//     if (this.price <= 0) {
+//       fail("Invalid price");
+//     }
+//   },
+// };
 
 // console.log(product.validateProduct());
 
@@ -229,7 +228,7 @@ const size = (value as string).length;
 // as any
 // disables type checking
 const x = "Mateus" as any;
-x.somethingInexistente(); // no error in compilation time
+// x.somethingNonExistent(); // no error in compilation time
 
 // as const
 // it makes a vlue immutable and literal
@@ -239,13 +238,17 @@ const requestStatus = "success" as const;
 let myName: string | null = null;
 
 // we use the non-null assertion operator to tell the compiler that name will never be null
-let nameLength = myName!.length;
+
+// let nameLength = myName!.length;
 
 const input = document.querySelector("input");
 
 // Non-null Assertion
 // Without the "!", TypeScript warns that `input` might be null
-input!.focus(); // The "!" operator asserts that input is definitely not null
+
+// input!.focus();
+
+// The "!" operator asserts that input is definitely not null
 
 // satisgies keyword
 type SomeUser = {
@@ -271,3 +274,272 @@ interface B {
 type AB = A & B; // we use the operator &
 let combinedValue: AB = { a: "hello", b: 42 };
 console.log(combinedValue);
+
+// The instanceof operator is a way to narrow down the type of a variable. It is used to check if an object is an instance of a class.
+class Bird {
+  fly() {
+    console.log("flying...");
+  }
+  layEggs() {
+    console.log("laying eggs...");
+  }
+}
+
+const pet = new Bird();
+
+// instanceof
+if (pet instanceof Bird) {
+  pet.fly();
+} else {
+  console.log("pet is not a bird");
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function example(x: unknown) {
+  if (isString(x)) {
+    // We can now call any 'string' method on 'x'.
+    x.toUpperCase();
+  } else {
+    console.log(x);
+  }
+}
+
+// Type predicate
+type Animal = Fish | Bird;
+
+interface Fish {
+  swim: () => void;
+}
+
+interface Bird {
+  fly: () => void;
+}
+
+function doSomething(animal: Animal) {
+  // How can we tell if 'animal' is a Fish or a Bird here?
+  // We need a way to narrow down the type.
+}
+
+function isFish(animal: Animal): animal is Fish {
+  // we explicit tell the animal type here
+  return (animal as Fish).swim !== undefined; // as is optional and make it safer
+}
+
+// function overloading
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
+
+function add(a: any, b: any): any {
+  // it works because it cover all signatures
+  return a + b;
+}
+
+console.log(add(1, 2)); // 3
+console.log(add("Hello", " World")); // "Hello World"
+
+// types vs itnerfaces
+type ID = number | string;
+
+type Person1 = {
+  name: string;
+  age: number;
+};
+
+interface Person2 {
+  // can only describre objects and classes, it can be extended
+  // no union, intersection, typeof
+  name: string;
+  age: number;
+}
+
+//extending example
+interface Shape {
+  width: number;
+  height: number;
+}
+
+interface Square extends Shape {
+  sideLength: number;
+}
+
+let square: Square = {
+  width: 10,
+  height: 10,
+  sideLength: 10,
+};
+
+console.log(square);
+
+// access modifiers
+// private
+class Animal2 {
+  private name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  private speak() {
+    console.log(`${this.name} makes a sound.`);
+  }
+}
+
+class Dog extends Animal2 {
+  constructor(name: string) {
+    super(name);
+  }
+
+  bark() {
+    // console.log(this.name); // ❌ Error: 'name' is private
+    // this.speak();            // ❌ Error: 'speak' is private
+  }
+}
+
+// protected
+class Animal3 {
+  protected name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+class Dog3 extends Animal3 {
+  bark() {
+    console.log(`${this.name} barks.`); // ✅ OK: name is protected
+  }
+}
+
+const dog = new Dog("Rex");
+// console.log(dog.name); // ❌ Error: 'name' is protected
+
+//Utility types
+
+// Pick, is a type where I can create a type derivated from another type, just
+// picking the values I want to
+
+interface Car {
+  brand: string;
+  motor: string;
+  fuel: string;
+  year: number;
+}
+
+const MyCar: Pick<Car, "brand" | "year"> = {
+  brand: "Chevrolet",
+  year: 2020,
+};
+
+console.log(MyCar);
+
+// Omit, similar to pick, but is this case we define the properties we'll omit.
+interface LoginInfo {
+  userName: string;
+  password: string;
+  createdAt: Date;
+}
+
+type userLogin = Omit<LoginInfo, "password">;
+
+const myLogin: userLogin = {
+  userName: "mateuzor@gmail.com",
+  createdAt: new Date(),
+};
+
+console.log(myLogin);
+
+// Record, is a type where we can we other types to create a new type key: value
+type Role = "admin" | "user" | "guest";
+
+const permissions: Record<Role, string[]> = {
+  admin: ["read", "write", "delete"],
+  user: ["read", "write"],
+  guest: ["read"],
+};
+
+type UserInfo = {
+  name: string;
+  age: number;
+};
+
+type Users = Record<string, UserInfo>;
+
+const users: Users = {
+  user1: { name: "Mateus", age: 30 },
+  user2: { name: "João", age: 25 },
+};
+
+// Readyonly, create with all the properties from another typ defined, but only for reading, it
+// cannot be reassigned;
+
+type Address = {
+  street: string;
+  number: number;
+  city: string;
+};
+
+const myAddress: Readonly<Address> = {
+  street: "Rua das gaivotas",
+  number: 666,
+  city: "Somewhere in the world",
+};
+
+myAddress.number = 333;
+
+// The Partial type in TypeScript allows you to make all properties of a type optional
+
+interface House {
+  bedrooms: number;
+  bathrooms: number;
+  doors: number;
+  carsAvailability: number;
+}
+
+const logHouseSettings = (house: Partial<House>): string => {
+  return `This house has ${house.bedrooms} bedrooms and ${house.bathrooms} bathrooms`;
+};
+
+console.log(
+  logHouseSettings({
+    bedrooms: 3,
+    bathrooms: 2,
+  })
+);
+
+// Exclude, basically its a way to create a new type based from a union type removing type I don't need/want to.
+type Stacks = "javaScript" | "Java" | "Typescript" | "React" | "Rust";
+
+type myStack = Exclude<Stacks, "Java" | "Rust">; // "javaScript" | "Typescript" | "React";
+
+// const stack: myStack = "Java";
+const stack: myStack = "React";
+
+console.log(stack);
+
+// Extract keep the elements which intersect between T and U
+
+type AllRoles = "admin" | "user" | "guest";
+type Restricted = "admin" | "owner";
+
+type Allowed = Extract<AllRoles, Restricted>;
+// Result - only admin which is present in both
+
+type NotAllowed = Exclude<AllRoles, Restricted>;
+// Result: "user" | "guest"
+
+// Advanced Types
+
+// Literal Types, the naming says it all, it need to be literally a value
+type Age = 42;
+
+let MyAgeToday: Age = 42; // ok
+// let MyAgeToday: Age = 43; // error
+
+// Template Literal Types, are a way to manipulate string values as types. They allow you to create a type based on the result of string manipulation or concatenatio
+type Name = `Mr. ${string}`;
+
+let MyRealName: Name = `Mr. Smith`; // ok
+// let name: Name = `Mrs. Smith`;  // error
