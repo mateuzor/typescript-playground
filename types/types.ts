@@ -1,3 +1,5 @@
+export {};
+
 // string
 let userName: string = "Mateus";
 console.log(userName);
