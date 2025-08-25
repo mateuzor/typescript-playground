@@ -58,24 +58,50 @@ console.log(myDog);
 // They are function that work like **properties**, this allow encapsultaing the state, have validations and transform the data
 // Calculated values without exposing the real attributes
 class Person {
+  private _age: number = 0;
   private _name: string;
-  private _age: number;
 
-  constructor(private name: string, private age: number) {
+  constructor(name: string, age: number) {
     this._name = name;
     this._age = age;
   }
 
-  get getAge() {
+  get age() {
     return this._age;
   }
 
-  get getName() {
+  get name() {
     return this._name;
+  }
+
+  set name(value) {
+    this._name = value;
   }
 }
 
 const me = new Person("Mateus", 33);
 
-console.log(me.getAge);
-console.log(me.getName);
+console.log(me.age);
+console.log(me.name);
+me.name = "João";
+console.log(me.name);
+
+// Static attributes and methods
+// These are properties and methods that belong to the class itself, not to its instances.
+// I can instantiate the class, but I will not be able to access static members through the instance.
+// Instances do not inherit static members.
+class Mathematics {
+  static PI: number = 3.1416;
+
+  static circleArea(radius: number): number {
+    return this.PI * radius * radius;
+  }
+}
+
+const m1 = new Mathematics();
+
+// console.log(m1);
+// console.log(m1.circleArea(4));
+console.log(Mathematics.circleArea(4));
+
+// Abstract Class
