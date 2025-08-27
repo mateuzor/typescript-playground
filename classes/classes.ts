@@ -1,3 +1,4 @@
+export {};
 // CLASSES
 // classes are blueprints for creating objects (instances of a class)
 
@@ -105,3 +106,41 @@ const m1 = new Mathematics();
 console.log(Mathematics.circleArea(4));
 
 // Abstract Class
+// An abstract class in TypeScript (and other object-oriented languages) is a special
+// kind of class that cannot be instantiated directly. It serves as a blueprint for other classes,
+// enforcing a structure while allowing flexibility through method implementations in subclasses.
+abstract class Database {
+  constructor(public connectionString: string) {}
+
+  connect(): void {
+    console.log(`Connecting to ${this.connectionString}`);
+  }
+
+  // Abstract method that must be implemented by subclasses
+  abstract query(sql: string): any;
+}
+
+// Implementation for PostgreSQL
+class PostgresDatabase extends Database {
+  query(sql: string): any {
+    console.log(`Running SQL on Postgres: ${sql}`);
+    return []; // Simulating data
+  }
+}
+
+// Implementation for MongoDB
+class MongoDatabase extends Database {
+  query(queryObject: string): any {
+    console.log(`Running Query on MongoDB: ${queryObject}`);
+    return []; // Simulating data
+  }
+}
+
+// Usage:
+const pg = new PostgresDatabase("postgres://localhost:5432");
+pg.connect(); // Output: Connecting to postgres://localhost:5432
+pg.query("SELECT * FROM users"); // Output: Running SQL on Postgres: SELECT * FROM users
+
+const mongo = new MongoDatabase("mongodb://localhost:27017");
+mongo.connect(); // Output: Connecting to mongodb://localhost:27017
+mongo.query("{ find: 'users' }"); // Output: Running Query on MongoDB: { find: 'users' }
