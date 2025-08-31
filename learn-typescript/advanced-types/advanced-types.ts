@@ -57,6 +57,21 @@ let MyRealName: Name = `Mr. Smith`; // ok
 
 console.log(MyRealName);
 
+// with unions
+type HttpMethod = "get" | "post" | "put" | "delete";
+type Status = "success" | "error";
+
+type ApiLogMessage = `${Uppercase<HttpMethod>}_${Capitalize<Status>}`;
+
+// ✅ possible values
+const a: ApiLogMessage = "GET_Success";
+const b: ApiLogMessage = "DELETE_Error";
+
+// ❌ type error
+// const c: ApiLogMessage = "PATCH_Error";
+// Type '"PATCH_Error"' is not assignable to type 'ApiLogMessage';
+
+//LITERAL TYPES
 // we're able to make a let variable work as a const with literal types, example below
 let x: "hello" = "hello";
 // OK
