@@ -57,6 +57,45 @@ let MyRealName: Name = `Mr. Smith`; // ok
 
 console.log(MyRealName);
 
+// we're able to make a let variable work as a const with literal types, example below
+let x: "hello" = "hello";
+// OK
+x = "hello";
+// ...
+// x = "howdy";
+
+// with functions
+function printText(s: string, alignment: "left" | "right" | "center") {
+  // ...
+}
+
+printText("Hello, world", "left"); // ok
+// printText("Hello, world", "justify"); // error
+
+// with numbers
+function compare(a: number, b: number): -1 | 0 | 1 {
+  return a < b ? -1 : a > b ? 1 : 0;
+  // return a < b ? -1 : a > b ? 2 : 0; // error, 2 is not allowed
+}
+
+// anothe example to give some attention
+declare function handleRequest(url: string, method: "GET" | "POST"): void;
+
+const req = { url: "https://example.com", method: "GET" };
+// handleRequest(req.url, req.method); // In the above example req.method is inferred to be string, could be any string
+// Argument of type 'string' is not assignable to parameter of type '"GET" | "POST"'.
+
+// workaround
+const req2 = { url: "https://example.com", method: "GET" as const };
+handleRequest(req2.url, req2.method); // ok
+
+// or
+const req3 = { url: "https://example.com", method: "GET" } as const;
+handleRequest(req3.url, req3.method); // ok
+
+// or
+handleRequest(req.url, req.method as "GET"); // ok
+
 // Recursive Type,
 // are a way to define a type that references itself, use for complex data structures,
 // such as trees or linked list.
